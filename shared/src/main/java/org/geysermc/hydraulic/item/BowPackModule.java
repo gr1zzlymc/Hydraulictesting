@@ -100,7 +100,13 @@ public class BowPackModule extends TexturePackModule<BowPackModule> {
             }
 
             ModelTexture layer0 = layers.getFirst();
-            String defaultOutputLoc = getOutputFromModel(context, layer0.key()).replace(".png", "");
+            Key layer0Key = layer0.key();
+            if (layer0Key == null) {
+                context.logger().warn("Bow {} has no layer0 texture key, skipping", bowLocation);
+                continue;
+            }
+
+            String defaultOutputLoc = getOutputFromModel(context, layer0Key).replace(".png", "");
 
             textures.put("default", defaultOutputLoc);
 
@@ -118,7 +124,13 @@ public class BowPackModule extends TexturePackModule<BowPackModule> {
                 }
 
                 ModelTexture pullingLayer0 = pullingLayers.getFirst();
-                String outputLoc = getOutputFromModel(context, pullingLayer0.key()).replace(".png", "");
+                Key pullingKey = pullingLayer0.key();
+                if (pullingKey == null) {
+                    context.logger().warn("Bow pulling model {} has no texture key, skipping", override.model());
+                    continue;
+                }
+
+                String outputLoc = getOutputFromModel(context, pullingKey).replace(".png", "");
 
                 Map<String, Float> predicate = new HashMap<>();
                 for (ItemPredicate itemPredicate : override.predicate()) {
