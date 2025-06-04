@@ -159,7 +159,14 @@ public class ItemPackModule extends TexturePackModule<ItemPackModule> {
             }
 
             ModelTexture layer0 = layers.getFirst();
-            String outputLoc = getOutputFromModel(context, layer0.key()); // TODO: sort this out, layer0.key() can be null, but the method we use doesn't want that
+
+            Key textureKey = layer0.key();
+            if (textureKey == null) {
+                context.logger().warn("Item {} has no texture key for layer0, skipping", itemLocation);
+                continue;
+            }
+
+            String outputLoc = getOutputFromModel(context, textureKey);
             bedrockPack.addItemTexture(itemLocation.toString(), outputLoc.replace(".png", ""));
         }
     }
